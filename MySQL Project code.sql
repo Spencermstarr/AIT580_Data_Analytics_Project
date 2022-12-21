@@ -1,0 +1,184 @@
+-- AIT580 Analytics Project MySQL queries
+USE covid;
+SET GLOBAL local_infile = 1;
+
+DROP TABLE IF EXISTS covid_data_table;
+
+
+-- create the table schema for the covid dataset
+CREATE TABLE covid_data_table (iso_code CHAR(3),
+	continent VARCHAR(20),
+	location VARCHAR(30),
+	date DATE,
+	total_cases BIGINT,
+	new_cases INT,
+    new_cases_smoothed FLOAT,
+	total_deaths BIGINT,
+	new_deaths INT,
+    new_deaths_smoothed FLOAT,
+    total_cases_per_million FLOAT,
+    new_cases_per_million FLOAT,
+    new_cases_smoothed_per_million FLOAT,
+    new_tests BIGINT,
+    total_tests BIGINT,
+    total_tests_per_thousand FLOAT,
+    new_tests_per_thousand FLOAT,
+    new_tests_smoothed FLOAT,
+    new_tests_smoothed_per_thousand FLOAT,
+    tests_per_case FLOAT,
+    positive_rate FLOAT,
+    test_units VARCHAR(25),
+    stringency_index FLOAT,
+    population BIGINT,
+    population_density FLOAT,
+    median_age FLOAT,
+    aged_65_older FLOAT,
+    aged_70_older FLOAT,
+    gdp_per_capita FLOAT,
+    extreme_poverty FLOAT,
+    cardiovasc_death_rate FLOAT,
+    diabetes_prevalence FLOAT,
+    female_smokers FLOAT,
+    male_smokers FLOAT,
+    handwashing_facilities FLOAT,
+    hospital_beds_per_thousand FLOAT,
+    life_expectancy FLOAT,
+    human_development_index FLOAT
+    );
+    
+SELECT * FROM covid_data_table;
+
+-- load the data
+LOAD DATA LOCAL INFILE 'C:/Users/spenc/Documents/George Mason University/Fall 2020/AIT 580/AIT 580 Project/owid-covid-data.csv'
+INTO TABLE covid_data_table
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+# Display the SQL schema
+DESCRIBE covid.covid_data_table;
+show create table covid_data_table;
+
+# checkout my handywork  
+SELECT * FROM covid_data_table;
+
+
+-- Several North American countries to compare to each other
+-- select all of the data for the USA
+SELECT * FROM covid_data_table
+	WHERE location = "United States";
+# calculate the current CFR for the United States
+SELECT max(total_deaths)/max(total_cases) FROM covid_data_table
+	WHERE location = "United States";
+SELECT (total_deaths/total_cases) AS cfr FROM covid_data_table
+	WHERE location = "United States" AND (total_deaths/total_cases) IS NOT NULL;
+
+
+-- select all of the data for Mexico
+SELECT * FROM covid_data_table
+	WHERE location = "Mexico";
+# calculate the current CFR for Mexico
+SELECT max(total_deaths)/max(total_cases) FROM covid_data_table
+	WHERE location = "Mexico";
+    
+-- select all of the data for Canada
+SELECT * FROM covid_data_table
+	WHERE location = "Canada";
+# calculate the current CFR for Canada
+SELECT max(total_deaths)/max(total_cases) FROM covid_data_table
+	WHERE location = "Canada";
+
+-- Several European countries to compare to each other
+-- select all of the data for the UK
+SELECT * FROM covid_data_table
+	WHERE location = "United Kingdom";
+# calculate the current CFR for the United Kingdom
+SELECT max(total_deaths)/max(total_cases) FROM covid_data_table
+	WHERE location = "United Kingdom";
+-- calculate the current CFR for the U.K. another way
+SELECT total_deaths/total_cases FROM covid_data_table
+	WHERE location = "United Kingdom" AND date = "2020-09-23";
+    
+-- select all of the data for Sweden
+SELECT * FROM covid_data_table
+	WHERE location = "Sweden";
+# calculate the current CFR for Sweden
+SELECT max(total_deaths)/max(total_cases) FROM covid_data_table
+	WHERE location = "Sweden";
+SELECT total_deaths/total_cases FROM covid_data_table
+	WHERE location = "Sweden" AND date = "2020-09-23";
+
+-- select all of the data for Poland
+SELECT * FROM covid_data_table
+	WHERE location = "Poland";
+# calculate the cumulative CFR for Poland
+SELECT max(total_deaths)/max(total_cases) AS CFR FROM covid_data_table
+	WHERE location = "Poland";
+SELECT total_deaths/total_cases AS CFR FROM covid_data_table
+	WHERE location = "Poland" AND date = "2020-09-23";
+
+-- select all of the data for Italy
+SELECT * FROM covid_data_table
+	WHERE location = "Italy"; 
+# calculate the current CFR for Italy
+SELECT max(total_deaths)/max(total_cases) FROM covid_data_table
+	WHERE location = "Italy";
+SELECT total_deaths/total_cases FROM covid_data_table
+	WHERE location = "Italy" AND date = "2020-09-23";
+    
+-- select all of the data for Spain
+SELECT * FROM covid_data_table
+	WHERE location = "Spain";
+# calculate the cumulative CFR for Spain
+SELECT max(total_deaths)/max(total_cases) AS CFR FROM covid_data_table
+	WHERE location = "Spain";
+SELECT total_deaths/total_cases AS CFR FROM covid_data_table
+	WHERE location = "Spain" AND date = "2020-09-23";
+
+
+-- outcomes in several Asian countries to compare to each other   
+-- select all of the data for China
+SELECT * FROM covid_data_table
+	WHERE location = "China"; 
+# calculate the current CFR for China
+SELECT max(total_deaths)/max(total_cases) FROM covid_data_table
+	WHERE location = "China";
+# select current CFR for China
+SELECT total_deaths/total_cases FROM covid_data_table
+	WHERE location = "China" AND date = "2020-09-23";
+
+-- select all of the data for Japan
+SELECT * FROM covid_data_table
+	WHERE location = "Japan"; 
+# calculate the current CFR for Japan
+SELECT max(total_deaths)/max(total_cases) FROM covid_data_table
+	WHERE location = "Japan";
+SELECT total_deaths/total_cases FROM covid_data_table
+	WHERE location = "Japan" AND date = "2020-09-23";
+    
+-- select all of the data for South Korea
+SELECT * FROM covid_data_table
+	WHERE location = "South Korea";
+# calculate the current CFR for South Korea
+SELECT max(total_deaths)/max(total_cases) FROM covid_data_table
+	WHERE location = "South Korea";
+SELECT total_deaths/total_cases FROM covid_data_table
+	WHERE location = "South Korea" AND date = "2020-09-23";
+
+-- select all of the data for Vietnam
+SELECT * FROM covid_data_table
+	WHERE location = "Vietnam"; 
+# calculate the current CFR for Vietnam
+SELECT max(total_deaths)/max(total_cases) FROM covid_data_table
+	WHERE location = "Vietnam";
+SELECT total_deaths/total_cases FROM covid_data_table
+	WHERE location = "Vietnam" AND date = "2020-09-23";
+
+
+SELECT * FROM covid_data_table WHERE date = "2020-09-23";
+
+
+
+
+
+    
